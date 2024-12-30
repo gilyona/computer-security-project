@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holon Telecom Register</title>
+</head>
+
+<body>
+    <div class="topnav">
+        <table>
+            <th><a href="index.html"> <img id="logo" src="./Images/logo.png" alt="Holon Telecom Logo"></a></th>
+            <th><a href="login.html"><button class="navButton">Login</button></a></th>
+            <th><a href="register.html"><button class="navButton">Register </button></a></th>
+        </table>
+    </div>
+
+    <div class="wrapper">
+        <h2>Registration</h2>
+        <form id="registration-form">
+            <div class="input-box">
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-box">
+                <input type="password" id="password" placeholder="Create password" required>
+            </div>
+            <div class="input-box">
+                <input type="password" id="confirm-password" placeholder="Confirm password" required>
+            </div>
+            <div class="policy">
+                <input type="checkbox" id="accept-terms" required>
+                <h3>I accept all terms & conditions</h3>
+            </div>
+            <div class="input-box button">
+                <input type="submit" value="Register Now">
+            </div>
+        </form>
+    </div>
+
+    <script>
+      document.getElementById('registration-form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent form from submitting normally
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const registrationData = { email, password };
+
+        fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(registrationData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === 'User registered successfully') {
+            // Redirect to login page after successful registration
+            window.location.href = 'login.html';
+          }
+        })
+        .catch(error => {
+          console.error('Error during registration:', error);
+          alert('Error during registration. Please try again.');
+        });
+      });
+    </script>
+</body>
+
+</html>

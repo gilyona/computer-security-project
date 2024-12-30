@@ -1,0 +1,286 @@
+* {
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  flex-direction: column;
+}
+
+.wrapper {
+  position: relative;
+  max-width: 430px;
+  width: 100%;
+  background: #fff;
+  padding: 34px;
+  border-radius: 6px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.wrapper h2 {
+  position: relative;
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+.wrapper h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 28px;
+  border-radius: 12px;
+  background: #44daf5;
+}
+
+.wrapper form .input-box {
+  height: 52px;
+  margin: 18px 0;
+}
+
+form .input-box input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  padding: 0 15px;
+  font-size: 17px;
+  font-weight: 400;
+  color: #333;
+  border: 1.5px solid #C7BEBE;
+  border-bottom-width: 2.5px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.input-box input:focus,
+.input-box input:valid {
+  border-color: #44daf5;
+}
+
+form .policy {
+  display: flex;
+  align-items: center;
+}
+
+form h3 {
+  color: #707070;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 10px;
+}
+
+.input-box.button input {
+  color: #fff;
+  letter-spacing: 1px;
+  border: none;
+  background: #44daf5;
+  cursor: pointer;
+}
+
+.input-box.button input:hover {
+  background: #44daf5;
+}
+
+form .text h3 {
+  color: #333;
+  width: 100%;
+  text-align: center;
+}
+
+form .text h3 a {
+  color: #44daf5;
+  text-decoration: none;
+}
+
+form .text h3 a:hover {
+  text-decoration: underline;
+}
+
+a {
+  text-decoration: none;
+}
+
+.navButton {
+  padding: 1em 2em;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #48c3d9;
+  transition: all 1000ms;
+  font-size: 15px;
+  position: relative;
+  overflow: hidden;
+  outline: 2px solid #48c3d9;
+}
+
+.navButton:hover {
+  color: #ffffff;
+  transform: scale(1.1);
+  outline: 2px solid #48c3d9;
+  box-shadow: 4px 5px 17px -4px #48c3d9;
+}
+
+.navButton::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background-color: #48c3d9;
+  transform: skewX(45deg);
+  z-index: -1;
+  transition: width 1000ms;
+}
+
+.navButton:hover::before {
+  width: 250%;
+}
+
+.topnav {
+  display: flex;
+  justify-content: space-between; /* Space out items evenly */
+  align-items: center;  /* Align items vertically */
+  padding: 10px 20px; /* Adjust padding for better spacing */
+  width: 100%;
+  flex-wrap: nowrap;  /* Prevent wrapping */
+}
+
+.topnav a, .topnav button {
+  margin: 0 10px; /* Added more space between elements */
+  display: inline-flex; /* Ensures the items are inline in a row */
+  align-items: center;  /* Align the content inside buttons and links */
+}
+
+#user-links, #admin-links {
+  display: flex; /* Ensure the links inside these containers are displayed in a row */
+  justify-content: center; /* Center-align the buttons */
+  align-items: center;
+}
+
+#user-links button, #admin-links button {
+  margin-right: 10px; /* Space between buttons */
+}
+
+.topnav img {
+  max-width: 100%; /* Ensures the logo image is responsive */
+  height: auto;
+  max-height: 100px; /* Adjust this to make the logo bigger (increase size) */
+}
+
+.contactBtn {
+  padding: 0.5em 1em; /* Reduced padding */
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  letter-spacing: 3px; /* Adjust if needed for smaller text */
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #48c3d9;
+  transition: all 1000ms;
+  font-size: 12px; /* Reduced font size */
+  position: relative;
+  overflow: hidden;
+  outline: 1px solid #48c3d9; /* Reduced outline thickness */
+}
+
+.contactBtn:hover {
+  color: #ffffff;
+  transform: scale(1.05); /* Slightly smaller scale on hover */
+  outline: 1px solid #48c3d9; /* Reduced outline thickness on hover */
+  box-shadow: 2px 3px 12px -4px #48c3d9; /* Reduced shadow */
+}
+
+.contactBtn::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background-color: #48c3d9;
+  transform: skewX(45deg);
+  z-index: -1;
+  transition: width 1000ms;
+}
+
+.contactBtn:hover::before {
+  width: 200%; /* Adjust width for smaller button */
+}
+
+.header {
+  background: linear-gradient(135deg, #48c3d9, #48c3d9);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+}
+
+.header p {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.packages {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 1rem;
+}
+
+.package {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 300px;
+  text-align: center;
+}
+
+.package h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #48c3d9;
+}
+
+.package p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.package .btn {
+  background: #48c3d9;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.package .btn:hover {
+  background: #48c3d9;
+}
+
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background: #48c3d9;
+  color: #f4f4f9;
+  font-size: 0.9rem;
+}

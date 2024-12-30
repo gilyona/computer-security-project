@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holon Telecom</title>
+</head>
+<body>
+  <div class="topnav">
+    <table>
+      <th><a href="index.html"><img id="logo" src="./Images/logo.png" alt="Holon Telecom Logo"></a></th>
+      <th><a href="login.html"><button class="navButton" id="login-link">Login</button></a></th>
+      <th><a href="register.html"><button class="navButton" id="register-link">Register</button></a></th>
+      
+      <!-- User Info and Admin Dashboard Links -->
+      <th><a href="user-info.html"><button class="navButton" id="user-info-link" style="display: none;">User Info</button></a></th>
+      <th><a href="admin-dashboard.html"><button class="navButton" id="admin-dashboard-link" style="display: none;">Admin Dashboard</button></a> </th>
+      
+      <th><button class="navButton" id="logout" style="display: none;">Logout</button></th> <!-- Logout Button -->
+    </table>
+  </div>
+
+  <header class="header">
+    <h1>Surf the Internet with Our Best Packages</h1>
+    <p>Choose the plan that suits your needs!</p>
+  </header>
+
+  <main class="packages">
+    <section class="package basic">
+      <h2>Basic Plan</h2>
+      <p>Speed: Up to 10 Mbps</p>
+      <p>Price: $10/month</p>
+      <button class="contactBtn">Subscribe</button>
+    </section>
+    <section class="package standard">
+      <h2>Standard Plan</h2>
+      <p>Speed: Up to 50 Mbps</p>
+      <p>Price: $30/month</p>
+      <button class="contactBtn">Subscribe</button>
+    </section>
+    <section class="package premium">
+      <h2>Premium Plan</h2>
+      <p>Speed: Up to 100 Mbps</p>
+      <p>Price: $50/month</p>
+      <button class="contactBtn">Subscribe</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2024 Holon Telecom</p>
+    <a href="contact.html"><button class="contactBtn"> Contact Us</button></a>
+  </footer>
+
+  <script>
+    // Check if the user is logged in and update the links accordingly
+    window.onload = function() {
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+  
+      if (token) {
+        // Hide login/register links, show logout link
+        document.getElementById('login-link').style.display = 'none';
+        document.getElementById('register-link').style.display = 'none';
+        document.getElementById('logout').style.display = 'block';
+        // Show the correct role-based link (user or admin)
+        document.getElementById('user-info-link').style.display = 'block'; // Show User Info link
+        if (role === 'admin') {
+          document.getElementById('admin-dashboard-link').style.display = 'block'; // Show Admin Dashboard link
+        }
+      } else {
+        // If not logged in, show the login and register buttons
+        document.getElementById('login-link').style.display = 'block';
+        document.getElementById('register-link').style.display = 'block';
+        document.getElementById('logout').style.display = 'none'; // Hide logout if not logged in
+        document.getElementById('user-info-link').style.display = 'none'; // Hide User Info link
+        document.getElementById('admin-dashboard-link').style.display = 'none'; // Hide Admin Dashboard link
+      }
+    }
+  
+    // Logout functionality
+    document.getElementById('logout').addEventListener('click', function() {
+      // Clear localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      localStorage.removeItem('email');
+  
+      // Reset the UI
+      document.getElementById('user-info-link').style.display = 'none';
+      document.getElementById('admin-dashboard-link').style.display = 'none';
+      document.getElementById('logout').style.display = 'none';
+  
+      // Show login/register links again
+        document.getElementById('login-link').style.display = 'block';
+      document.getElementById('register-link').style.display = 'block';
+  
+      // Optionally, redirect to login page or stay on current page
+      window.location.href = "login.html"; // Redirect to login page after logout
+    });
+  </script>
+  
+</body>
+</html>

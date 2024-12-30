@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holon Telecom Login</title>
+</head>
+<body>
+  <div class="topnav">
+    <table>
+      <th><a href="index.html"><img id="logo" src="./Images/logo.png" alt="Holon Telecom Logo"></a></th>
+      <th><a href="login.html"><button class="navButton">Login</button></a></th>
+      <th><a href="register.html"><button class="navButton">Register</button></a></th>
+    </table>
+  </div>
+
+  <div class="wrapper">
+    <h2>Login</h2>
+    <form id="login-form">
+      <div class="input-box">
+        <input type="email" id="email" placeholder="Enter your email" required>
+      </div>
+      <div class="input-box">
+        <input type="password" id="password" placeholder="Enter your password" required>
+      </div>
+      <div class="input-box button">
+        <input type="submit" value="Login Now">
+      </div>
+    </form>
+
+    <!-- Guest Links: Login/Register -->
+    <div id="guest-links" style="display: block;">
+      <!-- Links visible for guests -->
+    </div>
+
+    <!-- User Info Link: Will be shown after successful login -->
+    <div id="user-links" style="display:none;">
+      <a href="user-info.html"><button class="navButton">User Info</button></a>
+      <button class="navButton" id="logout" style="display: none;">Logout</button>
+    </div>
+
+    <!-- Admin Dashboard Link: Will be shown after successful admin login -->
+    <div id="admin-links" style="display:none;">
+      <a href="admin-dashboard.html"><button class="navButton">Admin Dashboard</button></a>
+    </div>
+  </div>
+
+  <script>
+    // Handle login form submission
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+  e.preventDefault(); // Prevent form from submitting normally
+
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  const loginData = { email, password };
+
+  fetch('http://localhost:3000/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(loginData)
+  })
+  .then(response => {
+    // If the response is not OK (e.g., password mismatch), show the error message
+    if (!response.ok) {
+      return response.json().then(data => {
+        throw new Error(data.message);  // Error from the backend
+      });
+    }
+    // If the response is OK, return the response body
+    return response.json();
+  })
+  .then(data => {
+    // Handle success
+    if (data.message === 'Login successful') {
+      // Hide login and register links, show user info link
+      document.getElementById('guest-links').style.display = 'none';
+      document.getElementById('user-links').style.display = 'block';
+
+      // If the user is admin, show admin link
+      if (data.role === 'admin') {
+        document.getElementById('admin-links').style.display = 'block';
+      }
+
+      // Store the token and role for future use
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('role', data.role);
+      localStorage.setItem('email', data.email);
+
+      alert(data.message); // Successful login message
+      window.location.href = "user-info.html"; // Redirect to user info page
+    }
+  })
+  .catch(error => {
+    // Catch errors (e.g., password mismatch, account locked)
+    console.error('Error during login:', error);
+    alert(error.message); // Show the error message from the server (e.g., invalid password, account locked)
+  });
+});
+
+  </script>
+  
+</body>
+</html>

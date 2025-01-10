@@ -29,9 +29,14 @@ db.connect((err) => {
 });
 
 // Function to validate password complexity
-const validatePassword = (password) => {
+const validatePassword = (password,confirmPassword) => {
+  
+  console.log('Password:', password);
+  console.log('Confirm Password:', confirmPassword);
   const { minLength, maxLength, complexity, checkDictionary } = passwordConfig;
-
+  if (password !== confirmPassword) {
+    return 'Password and confirm password do not match.';
+  }
   if (password.length < minLength) {
     return `Password must be at least ${minLength} characters long.`;
   }
@@ -84,12 +89,16 @@ const isAccountLocked = (lockedUntil) => {
 }
 
 
+
+
 // User registration route
 app.post('/register', (req, res) => {
-  const { email, password } = req.body;
-
+  const { email, password, confirmPassword } = req.body;
+  console.log('Incoming request to /register');
+  console.log('Request body:', req.body);
   // Validate password complexity and length
-  const validationError = validatePassword(password);
+
+  const validationError = validatePassword(password,confirmPassword);
   if (validationError) {
     return res.status(400).json({ message: validationError });
   }

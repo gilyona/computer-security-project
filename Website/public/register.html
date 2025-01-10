@@ -19,6 +19,8 @@
 
     <div class="wrapper">
         <h2>Registration</h2>
+        <!-- Error Message Placeholder -->
+        <div id="error-message" style="color: red; display: none; margin-bottom: 10px;"></div>
         <form id="registration-form">
             <div class="input-box">
                 <input type="email" id="email" placeholder="Enter your email" required>
@@ -40,33 +42,43 @@
     </div>
 
     <script>
-      document.getElementById('registration-form').addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent form from submitting normally
+        document.getElementById('registration-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent form from submitting normally
 
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
 
-        const registrationData = { email, password };
 
-        fetch('http://localhost:3000/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(registrationData)
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message === 'User registered successfully') {
-            // Redirect to login page after successful registration
-            window.location.href = 'login.html';
-          }
-        })
-        .catch(error => {
-          console.error('Error during registration:', error);
-          alert('Error during registration. Please try again.');
+            const registrationData = { email, password,confirmPassword };
+
+            fetch('http://localhost:3000/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(registrationData),
+            })
+                .then(async (response) => {
+                    const errorMessageDiv = document.getElementById('error-message');
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        errorMessageDiv.textContent = errorData.message; // Display error message
+                        errorMessageDiv.style.display = 'block'; // Make it visible
+                        throw new Error(errorData.message);
+                    } else {
+                        errorMessageDiv.style.display = 'none'; // Hide the error message on success
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    // Registration successful
+                    window.location.href = 'login.html';
+                })
+                .catch((error) => {
+                    console.error('Error during registration:', error);
+                });
         });
-      });
     </script>
 </body>
 

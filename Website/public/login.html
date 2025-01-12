@@ -37,11 +37,6 @@
       <!-- Links visible for guests -->
     </div>
 
-    <!-- User Info Link: Will be shown after successful login -->
-    <div id="user-links" style="display:none;">
-      <a href="user-info.html"><button class="navButton">User Info</button></a>
-      <button class="navButton" id="logout" style="display: none;">Logout</button>
-    </div>
 
     <!-- Admin Dashboard Link: Will be shown after successful admin login -->
     <div id="admin-links" style="display:none;">
@@ -81,20 +76,15 @@
     if (data.message === 'Login successful') {
       // Hide login and register links, show user info link
       document.getElementById('guest-links').style.display = 'none';
-      document.getElementById('user-links').style.display = 'block';
-
-      // If the user is admin, show admin link
-      if (data.role === 'admin') {
-        document.getElementById('admin-links').style.display = 'block';
-      }
+      document.getElementById('admin-links').style.display ='block';
+    
 
       // Store the token and role for future use
       localStorage.setItem('token', data.token);
-      localStorage.setItem('role', data.role);
       localStorage.setItem('email', data.email);
 
       alert(data.message); // Successful login message
-      window.location.href = "user-info.html"; // Redirect to user info page
+      window.location.href = "admin-dashboard.html"; // Redirect to user info page
     }
   })
   .catch(error => {

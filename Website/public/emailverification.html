@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holon Telecom</title>
+    <script>
+        async function handleVerificationFormSubmit(event) {
+            event.preventDefault();
+            
+            const verificationCode = document.getElementById('verification-code').value;
+            const email = sessionStorage.getItem('resetEmail');
+
+            if (!email) {
+                alert('Email not found. Please start the reset process again.');
+                window.location.href = '/forgotpass.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('/verify-reset-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'CSRF-Token': document.querySelector('input[name="_csrf"]').value
+                    },
+                    body: JSON.stringify({ 
+                        verificationCode,
+                        email 
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Code verified successfully.');
+                    window.location.href = '/reset-password.html';
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error verifying the code. Please try again.');
+            }
+        }
+
+        window.onload = function() {
+            const email = sessionStorage.getItem('resetEmail');
+            if (!email) {
+                alert('Please start the password reset process from the beginning.');
+                window.location.href = '/forgotpass.html';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="topnav">
+        <table>
+            <th><a href="index.html"> <img id="logo" src="./Images/logo.png" alt="Holon Telecom Logo"></a></th>
+            <th><a href="login.html"><button class="navButton">Login</button></a></th>
+            <th><a href="register.html"><button class="navButton">Register</button></a></th>
+        </table>
+    </div>
+
+    <div class="wrapper">
+        <h2>Code Verification</h2>
+        <form id="verification-form" onsubmit="handleVerificationFormSubmit(event)">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <div class="input-box">
+                <input type="text" id="verification-code" name="verificationCode" placeholder="Enter your code" required>
+            </div>
+            <div class="input-box button">
+                <input type="submit" value="Verify Code">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

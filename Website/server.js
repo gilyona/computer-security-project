@@ -30,6 +30,8 @@ const transporter = nodemailer.createTransport({
   host: config.email.host, // SMTP host of Mailjet
   port: config.email.port, // SMTP port of Mailjet
 });
+
+
 app.post('/verify-reset-code', (req, res) => {
   const { verificationCode, email } = req.body;
   const resetData = resetCodeMap.get(email);

@@ -169,38 +169,55 @@ app.listen(3000, () => {
 app.get('/api/clients', (req, res) => {
   console.log('Received request to fetch clients');
   Client.getAllClients((err, results) => {
-      if (err) {
-          console.error('Error fetching clients:', err);
-          return res.status(500).json({ message: 'Database error' });
-      }
-      console.log('Fetched clients:', results);
-      res.status(200).json(results);
+    if (err) {
+      console.error('Error fetching clients:', err);
+      return res.status(500).json({ message: 'Database error' });
+    }
+    console.log('Fetched clients:', results);
+    res.status(200).json(results);
   });
 });
 
-
-
+// Add a new client
 // Add a new client
 app.post('/api/clients', (req, res) => {
   const { first_name, last_name, phone_number, email, address, package } = req.body;
 
   // Validate required fields
   if (!first_name || !last_name || !phone_number || !email) {
-      return res.status(400).json({ message: 'Missing required fields' });
+    return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  const clientData = { first_name, last_name, phone_number, address, email, package };
-  Client.createClient(clientData, (err, results) => {
+  // Check if the email already exists
+  const emailCheckQuery = 'SELECT * FROM clients WHERE email = ?';
+  db.query(emailCheckQuery, [email], (err, results) => {
+    if (err) {
+      console.error('Error checking email:', err);
+      return res.status(500).json({ message: 'Database error' });
+    }
+
+    if (results.length > 0) {
+      return res.status(400).json({ message: 'Email already in use!' });
+    }
+
+    // Proceed to add the client
+    const clientData = { first_name, last_name, phone_number, address, email, package };
+    Client.createClient(clientData, (err, results) => {
       if (err) {
-          console.error('Error adding client:', err);
-          return res.status(500).json({ message: 'Database error' });
+        console.error('Error adding client:', err);
+        return res.status(500).json({ message: 'Database error' });
       }
-      res.status(201).json({ message: 'Client added successfully', id_clients: results.insertId });
+      res.status(201).json({
+        message: 'Client added successfully',
+        first_name,
+        last_name,
+      });
+    });
   });
 });
 
 
-// Delete a client
+
 // Delete a client
 app.delete('/api/clients/:id_clients', (req, res) => {
   const clientId = req.params.id_clients;
@@ -230,5 +247,3 @@ app.delete('/api/clients/:id_clients', (req, res) => {
     });
   });
 });
-
-

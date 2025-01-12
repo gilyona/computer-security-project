@@ -44,29 +44,31 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Add Client</h2>
+            <div id="error-message" style="display: none; color: red; margin-bottom: 10px;"></div>
             <form id="addClientForm">
                 <label for="firstName">First Name:</label>
                 <input type="text" id="firstName" required>
-                
+
                 <label for="lastName">Last Name:</label>
                 <input type="text" id="lastName" required>
-                
+
                 <label for="phoneNumber">Phone Number:</label>
                 <input type="text" id="phoneNumber" required>
-                
+
                 <label for="address">Address (Optional):</label>
                 <input type="text" id="address">
-                
+
                 <label for="email">Email:</label>
                 <input type="email" id="email" required>
-                
+
                 <label for="packageName">Package (Optional):</label>
                 <input type="text" id="packageName">
-                
+
                 <button type="submit" class="admin-actions">Submit</button>
             </form>
         </div>
     </div>
+
 
     <script>
         // Logout functionality
@@ -75,20 +77,24 @@
             localStorage.removeItem('email');
             window.location.href = "login.html";
         });
-
+    
         // Fetch clients from the database
         async function fetchClients() {
             const tableBody = document.querySelector('#clients-table tbody');
-            tableBody.innerHTML = ''; // Clear existing rows
-
+            
+            // Clear table rows properly
+            while (tableBody.firstChild) {
+                tableBody.removeChild(tableBody.firstChild);
+            }
+    
             try {
                 const response = await fetch('/api/clients');
                 const clients = await response.json();
-
-                clients.forEach(client => {
+    
+                clients.forEach((client) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${client.id}</td>
+                        <td>${client.id_clients}</td>
                         <td>${client.first_name}</td>
                         <td>${client.last_name}</td>
                         <td>${client.phone_number}</td>
@@ -101,64 +107,115 @@
                     `;
                     tableBody.appendChild(row);
                 });
-
-                document.querySelectorAll('.remove').forEach(button => {
-                    button.addEventListener('click', async function () {
-                        const clientId = this.getAttribute('data-id');
-                        if (confirm(`Are you sure you want to remove client with ID ${clientId}?`)) {
-                            await deleteClient(clientId);
-                            fetchClients();
-                        }
-                    });
-                });
+    
+                // Attach remove event listeners
+                attachRemoveEventListeners();
+    
+                // Attach search filter functionality
+                const searchInput = document.getElementById('search-clients');
+                searchInput.addEventListener('input', () => filterClients(searchInput.value, clients));
             } catch (error) {
                 console.error('Error fetching clients:', error);
                 alert('Failed to fetch clients. Please try again later.');
             }
         }
-
+    
+        // Attach remove event listeners
+        function attachRemoveEventListeners() {
+            document.querySelectorAll('.remove').forEach((button) => {
+                button.addEventListener('click', async function () {
+                    const clientId = this.getAttribute('data-id');
+                    const clientRow = this.closest('tr');
+                    const mail = clientRow.querySelector('td:nth-child(6)').textContent;
+    
+                    if (confirm(`Are you sure you want to remove the user with the email:\n\n ${mail}?`)) {
+                        await deleteClient(clientId);
+                        fetchClients(); // Refresh clients
+                    }
+                });
+            });
+        }
+    
+        // Filter clients based on search input
+        function filterClients(query, clients) {
+            const tableBody = document.querySelector('#clients-table tbody');
+            const lowerCaseQuery = query.toLowerCase();
+    
+            // Clear existing rows
+            while (tableBody.firstChild) {
+                tableBody.removeChild(tableBody.firstChild);
+            }
+    
+            // Filter and display clients
+            const filteredClients = clients.filter(client =>
+                client.first_name.toLowerCase().includes(lowerCaseQuery) ||
+                client.last_name.toLowerCase().includes(lowerCaseQuery) ||
+                client.email.toLowerCase().includes(lowerCaseQuery)
+            );
+    
+            filteredClients.forEach((client) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.id_clients}</td>
+                    <td>${client.first_name}</td>
+                    <td>${client.last_name}</td>
+                    <td>${client.phone_number}</td>
+                    <td>${client.address || 'N/A'}</td>
+                    <td>${client.email}</td>
+                    <td>${client.package || 'N/A'}</td>
+                    <td>
+                        <button class="admin-actions remove" data-id="${client.id_clients}">Remove</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+    
+            // Reattach remove event listeners for filtered rows
+            attachRemoveEventListeners();
+        }
+    
         // Delete client functionality
         async function deleteClient(clientId) {
             try {
                 const response = await fetch(`/api/clients/${clientId}`, { method: 'DELETE' });
+                const data = await response.json();
+    
                 if (!response.ok) {
-                    if (response.status === 404) {
-                        alert('Client not found!');
-                        return;
-                    }
                     throw new Error('Failed to delete client.');
                 }
-                const deletedClient = await response.json();
-                alert(`Client Removed: ${deletedClient.first_name} ${deletedClient.last_name}`);
+    
+                alert(`Client Removed: ${data.first_name}`);
             } catch (error) {
                 console.error('Error removing client:', error);
                 alert('Failed to remove client. Please try again.');
             }
         }
-
+    
         // Modal Controls
         const addClientModal = document.getElementById('addClientModal');
         const addClientButton = document.querySelector('.admin-actions:not(.remove)');
         const closeModalButton = document.querySelector('.close');
         const addClientForm = document.getElementById('addClientForm');
-
+    
         // Open the modal
         addClientButton.addEventListener('click', () => {
+            addClientForm.reset(); // Clear inputs
             addClientModal.style.display = 'block';
         });
-
+    
         // Close the modal
         closeModalButton.addEventListener('click', () => {
             addClientModal.style.display = 'none';
         });
-
+    
         // Close modal on outside click
         window.addEventListener('click', (event) => {
             if (event.target === addClientModal) {
+                addClientForm.reset(); // Clear inputs
                 addClientModal.style.display = 'none';
             }
         });
-
+    
         // Handle form submission
         addClientForm.addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -168,7 +225,9 @@
             const address = document.getElementById('address').value;
             const email = document.getElementById('email').value;
             const packageName = document.getElementById('packageName').value;
-
+    
+            const errorMessageDiv = document.getElementById('error-message');
+    
             try {
                 const response = await fetch('/api/clients', {
                     method: 'POST',
@@ -182,20 +241,30 @@
                         package: packageName,
                     }),
                 });
-
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    errorMessageDiv.textContent = errorData.message;
+                    errorMessageDiv.style.color = 'red';
+                    errorMessageDiv.style.display = 'block';
+                    throw new Error(errorData.message);
+                }
+    
+                errorMessageDiv.style.display = 'none';
                 const newClient = await response.json();
                 alert(`Client Added: ${newClient.first_name} ${newClient.last_name}`);
                 addClientModal.style.display = 'none';
                 fetchClients();
+                addClientForm.reset();
             } catch (error) {
                 console.error('Error adding client:', error);
-                alert('Failed to add client. Please try again.');
             }
         });
-
+    
         // Initial fetch
         fetchClients();
     </script>
+    
 </body>
 
 </html>

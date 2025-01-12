@@ -12,9 +12,6 @@
       <th><a href="index.html"><img id="logo" src="./Images/logo.png" alt="Holon Telecom Logo"></a></th>
       <th><a href="login.html"><button class="navButton" id="login-link">Login</button></a></th>
       <th><a href="register.html"><button class="navButton" id="register-link">Register</button></a></th>
-      
-      <!-- User Info and Admin Dashboard Links -->
-      <th><a href="user-info.html"><button class="navButton" id="user-info-link" style="display: none;">User Info</button></a></th>
       <th><a href="admin-dashboard.html"><button class="navButton" id="admin-dashboard-link" style="display: none;">Admin Dashboard</button></a> </th>
       
       <th><button class="navButton" id="logout" style="display: none;">Logout</button></th> <!-- Logout Button -->
@@ -63,22 +60,13 @@
         document.getElementById('login-link').style.display = 'none';
         document.getElementById('register-link').style.display = 'none';
         document.getElementById('logout').style.display = 'block';
-<<<<<<< Updated upstream
-        // Show the correct role-based link (user or admin)
-        document.getElementById('user-info-link').style.display = 'block'; // Show User Info link
-        if (role === 'admin') {
-          document.getElementById('admin-dashboard-link').style.display = 'block'; // Show Admin Dashboard link
-        }
-=======
         document.getElementById('admin-dashboard-link').style.display = 'block'; // Show Admin Dashboard link
         
->>>>>>> Stashed changes
       } else {
         // If not logged in, show the login and register buttons
         document.getElementById('login-link').style.display = 'block';
         document.getElementById('register-link').style.display = 'block';
         document.getElementById('logout').style.display = 'none'; // Hide logout if not logged in
-        document.getElementById('user-info-link').style.display = 'none'; // Hide User Info link
         document.getElementById('admin-dashboard-link').style.display = 'none'; // Hide Admin Dashboard link
       }
     }
@@ -91,7 +79,6 @@
       localStorage.removeItem('email');
   
       // Reset the UI
-      document.getElementById('user-info-link').style.display = 'none';
       document.getElementById('admin-dashboard-link').style.display = 'none';
       document.getElementById('logout').style.display = 'none';
   
@@ -99,7 +86,6 @@
         document.getElementById('login-link').style.display = 'block';
       document.getElementById('register-link').style.display = 'block';
   
-      // Optionally, redirect to login page or stay on current page
       window.location.href = "login.html"; // Redirect to login page after logout
     });
   </script>

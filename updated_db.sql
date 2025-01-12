@@ -16,8 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
-<<<<<<<< Updated upstream:holontelecomdb_users.sql
-========
 -- Table structure for table `clients`
 --
 
@@ -46,7 +44,6 @@ LOCK TABLES `clients` WRITE;
 UNLOCK TABLES;
 
 --
->>>>>>>> Stashed changes:Dump20250112 (2).sql
 -- Table structure for table `users`
 --
 
@@ -60,11 +57,7 @@ CREATE TABLE `users` (
   `password_history` json DEFAULT NULL,
   `login_attempts` int DEFAULT '0',
   `locked_until` datetime DEFAULT NULL,
-<<<<<<<< Updated upstream:holontelecomdb_users.sql
-  `role` enum('admin','user') DEFAULT 'user',
-========
   `password_history_limit` int DEFAULT '3',
->>>>>>>> Stashed changes:Dump20250112 (2).sql
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -76,11 +69,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-<<<<<<<< Updated upstream:holontelecomdb_users.sql
-INSERT INTO `users` VALUES (2,'gilyona43@walla.com','$2a$10$tqZ7XRSCisLxFD2RUn0rFOovvNLKxeCQ0XTm70ENLa5tzDujKJaqq','[\"$2a$10$tqZ7XRSCisLxFD2RUn0rFOovvNLKxeCQ0XTm70ENLa5tzDujKJaqq\"]',0,NULL,'user'),(4,'admin@example.com','$2a$10$IQhY31nIFb8dwmWbFX2Cuu2vaPbiY66Z5MGMHeRiNjxeJjvNQ.PHy','[\"$2a$10$IQhY31nIFb8dwmWbFX2Cuu2vaPbiY66Z5MGMHeRiNjxeJjvNQ.PHy\"]',3,'2024-12-22 19:18:18','admin'),(5,'gil_one9@walla.com','$2a$10$pwcDHK1sOhFEavuNhFtWJ./Q0WjQMIrXjXCY73lHfzkFp8pkKUniG','[\"$2a$10$pwcDHK1sOhFEavuNhFtWJ./Q0WjQMIrXjXCY73lHfzkFp8pkKUniG\"]',0,NULL,'user'),(6,'checkcheck@gmail.com','$2a$10$fKJWBMwvqwxVv2vqLekqxeqEPGpcc8Ps0zzYuP7ku7t021/cShxSW','[\"$2a$10$fKJWBMwvqwxVv2vqLekqxeqEPGpcc8Ps0zzYuP7ku7t021/cShxSW\"]',0,NULL,'user'),(7,'blabla@gmail.com','$2a$10$nUzbeME/tVqMaRQCXBLOSOqJioGEmNn8PeuZeH4yvVpjw5FJPtuhS','[\"$2a$10$nUzbeME/tVqMaRQCXBLOSOqJioGEmNn8PeuZeH4yvVpjw5FJPtuhS\"]',0,NULL,'user');
-========
 INSERT INTO `users` VALUES (2,'gilyona43@walla.com','$2a$10$tqZ7XRSCisLxFD2RUn0rFOovvNLKxeCQ0XTm70ENLa5tzDujKJaqq','[\"$2a$10$vrc2wHIB1a94PE9lvT2uJOTuOZWdAnszdl3o7DYDNyA08avPPi44e\"]',0,NULL,3),(4,'admin@example.com','$2a$10$IQhY31nIFb8dwmWbFX2Cuu2vaPbiY66Z5MGMHeRiNjxeJjvNQ.PHy','[\"$2a$10$vrc2wHIB1a94PE9lvT2uJOTuOZWdAnszdl3o7DYDNyA08avPPi44e\"]',4,'2025-01-12 12:00:42',3),(5,'gil_one9@walla.com','$2a$10$pwcDHK1sOhFEavuNhFtWJ./Q0WjQMIrXjXCY73lHfzkFp8pkKUniG','[\"$2a$10$vrc2wHIB1a94PE9lvT2uJOTuOZWdAnszdl3o7DYDNyA08avPPi44e\"]',0,NULL,3),(6,'checkcheck@gmail.com','$2a$10$fKJWBMwvqwxVv2vqLekqxeqEPGpcc8Ps0zzYuP7ku7t021/cShxSW','[\"$2a$10$vrc2wHIB1a94PE9lvT2uJOTuOZWdAnszdl3o7DYDNyA08avPPi44e\"]',0,NULL,3),(7,'blabla@gmail.com','$2a$10$nUzbeME/tVqMaRQCXBLOSOqJioGEmNn8PeuZeH4yvVpjw5FJPtuhS','[\"$2a$10$vrc2wHIB1a94PE9lvT2uJOTuOZWdAnszdl3o7DYDNyA08avPPi44e\"]',0,NULL,3),(8,'gil.yona@gmail.com','$2a$10$z6Pdv6AjSfOsLStXxS6jEONmpumxMuRMSI3lr7D0K8Y1ZGZKCzFA2','[\"$2a$10$vrc2wHIB1a94PE9lvT2uJOTuOZWdAnszdl3o7DYDNyA08avPPi44e\", \"$2a$10$3uO0S01a5SXQAdcxIb8dS.dfh7Gty87hs8to9bCohrboY06ekcYn2\", \"$2a$10$z6Pdv6AjSfOsLStXxS6jEONmpumxMuRMSI3lr7D0K8Y1ZGZKCzFA2\"]',0,NULL,3);
->>>>>>>> Stashed changes:Dump20250112 (2).sql
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -93,8 +82,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-<<<<<<<< Updated upstream:holontelecomdb_users.sql
--- Dump completed on 2025-01-10 17:21:35
-========
 -- Dump completed on 2025-01-12 21:52:14
->>>>>>>> Stashed changes:Dump20250112 (2).sql

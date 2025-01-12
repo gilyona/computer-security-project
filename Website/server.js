@@ -3,19 +3,12 @@ const cors = require('cors');
 const path = require('path');  // To serve static iiles
 const mysql = require('mysql2');
 const bcrypt = require('bcryptjs');
-<<<<<<< Updated upstream
-const jwt = require('jsonwebtoken'); // Make sure this is installed
-const User = require('./models/users');  
-const passwordConfig = require('./passwordConfig');  // Import the password configuration
-=======
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const config = require('./config');
 const { validatePassword } = require('./passwordUtils'); // Import password validation logic
-
->>>>>>> Stashed changes
-
 const app = express();
+
 
 // Enable CORS
 app.use(cors());
@@ -23,7 +16,6 @@ app.use(express.json());  // To parse incoming JSON requests
 
 // Serve static files (like HTML, CSS, JS) from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 // Create the transporter with Mailjet settings
 const transporter = nodemailer.createTransport({
@@ -93,11 +85,11 @@ app.post('/verify-reset-code', (req, res) => {
       res.status(400).json({ message: 'Invalid verification code.' });
   }
 });
+
 // Update the reset code storage with expiration
-
 const resetCodeMap = new Map();
-// Route to send reset code to the user's email
 
+// Route to update the user's password after reset
 app.post('/reset-password', async (req, res) => {
   const { email, password } = req.body;
 
@@ -166,8 +158,6 @@ app.post('/reset-password', async (req, res) => {
 });
 
 
-
-
 // Route to verify the code entered by the user
 app.post('/verify-reset-code', (req, res) => {
     const { verificationCode, email } = req.body;
@@ -191,7 +181,6 @@ app.post('/verify-reset-code', (req, res) => {
     }
 });
 
-// Route to handle password reset
 
 
 // Create a connection to the MySQL database
@@ -206,60 +195,7 @@ db.connect((err) => {
   console.log('Connected to MySQL database');
 });
 
-<<<<<<< Updated upstream
-// Function to validate password complexity
-const validatePassword = (password,confirmPassword) => {
-  
-  console.log('Password:', password);
-  console.log('Confirm Password:', confirmPassword);
-  const { minLength, maxLength, complexity, checkDictionary } = passwordConfig;
-  if (password !== confirmPassword) {
-    return 'Password and confirm password do not match.';
-  }
-  if (password.length < minLength) {
-    return `Password must be at least ${minLength} characters long.`;
-  }
-  if (password.length > maxLength) {
-    return `Password must be no more than ${maxLength} characters long.`;
-  }
 
-  if (complexity.upperCase && !/[A-Z]/.test(password)) {
-    return 'Password must contain at least one uppercase letter.';
-  }
-  if (complexity.lowerCase && !/[a-z]/.test(password)) {
-    return 'Password must contain at least one lowercase letter.';
-  }
-  if (complexity.digits && !/\d/.test(password)) {
-    return 'Password must contain at least one digit.';
-  }
-  if (complexity.specialChars && !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-    return 'Password must contain at least one special character.';
-  }
-
-  if (checkDictionary && containsDictionaryWord(password)) {
-    return 'Password cannot contain dictionary words.';
-  }
-
-  return null;  // Return null if password is valid
-};
-
-// Function to check if the password contains dictionary words
-const words = require('english-words');
-
-// Convert Set to Array for iteration
-const containsDictionaryWord = (password) => {
-  const lowerCasePassword = password.toLowerCase();
-  
-  // Convert the Set to an array and loop through
-  for (let word of Array.from(words)) {
-    if (lowerCasePassword.includes(word)) {
-      return true;  // Return true if dictionary word is found
-    }
-  }
-  return false;  // No dictionary word found
-};
-=======
->>>>>>> Stashed changes
 
 // Helper function to check if an account is locked
 // Check if the account is locked by comparing `locked_until`
@@ -270,8 +206,6 @@ const isAccountLocked = (lockedUntil) => {
 }
 
 
-
-
 // User registration route
 app.post('/register', (req, res) => {
   const { email, password, confirmPassword } = req.body;
@@ -279,64 +213,46 @@ app.post('/register', (req, res) => {
   console.log('Request body:', req.body);
   // Validate password complexity and length
 
-<<<<<<< Updated upstream
-  const validationError = validatePassword(password,confirmPassword);
-=======
+
   // Validate the password using `validatePassword`
   const validationError = validatePassword(password, confirmPassword); 
->>>>>>> Stashed changes
+
   if (validationError) {
     return res.status(400).json({ message: validationError });
   }
 
   // Check if the email already exists
   User.findUserByEmail(email, (err, results) => {
-<<<<<<< Updated upstream
-    if (err) return res.status(500).json({ message: 'Database error' });
-    
-    // Check if the results array is empty or contains a user
-=======
+
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ message: 'Database error' });
     }
 
     // Check if the email is already in use
->>>>>>> Stashed changes
     if (results.length > 0) {
       return res.status(400).json({ message: 'Email already in use' });
     }
 
-<<<<<<< Updated upstream
-    // Hash the password
-=======
+
     // Hash the password and create the user
->>>>>>> Stashed changes
     bcrypt.hash(password, 10, (err, hashedPassword) => {
       if (err) {
         console.error('Error hashing password:', err);
         return res.status(500).json({ message: 'Error hashing password' });
       }
 
-<<<<<<< Updated upstream
-      // Create the user
-      User.createUser(email, hashedPassword, (err, results) => {
-        if (err) return res.status(500).json({ message: 'Error saving user' });
-=======
       User.createUser(email, hashedPassword, (err) => {
         if (err) {
           console.error('Error saving user:', err);
           return res.status(500).json({ message: 'Error saving user' });
         }
->>>>>>> Stashed changes
         res.status(200).json({ message: 'User registered successfully' });
       });
     });
   });
 });
 
-// Login route
-// Login route
 // Login route
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
@@ -395,10 +311,6 @@ app.post('/login', (req, res) => {
     });
   });
 });
-
-
-
-
 
 // Start the server on port 3000
 app.listen(3000, () => {

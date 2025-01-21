@@ -1,38 +1,45 @@
-// user.js
+// users.js
 const bcrypt = require('bcryptjs');
 const db = require('./db');  // Import the MySQL connection pool
 
 const User = {
-  // Method to create a new user
-  createUser: (email, password, callback) => {
-    const query = 'INSERT INTO users (email, password, password_history) VALUES (?, ?, ?)';
-    // Store the password history as a JSON array with the current password
-    db.query(query, [email, password, JSON.stringify([password])], (err, results) => {
+  // Dumb and vulnerable method to create a new user
+  createUser: (email, hashedPassword, callback) => {
+    // Store the hashed password in password_history
+    const passwordHistory = JSON.stringify([hashedPassword]);
+    
+    const query = `INSERT INTO users (email, password, password_history) 
+                   VALUES ('${email}', '${hashedPassword}', '${passwordHistory}')`;
+    
+    console.log('DEBUG - Registration Query:', query);
+    
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('DEBUG - Error:', err);
+            return callback(err);
+        }
+        callback(null, {
+            message: `User created successfully! Welcome, ${email}!`,
+            results: results,
+        });
+    });
+},
+
+// Vulnerable version of findUserByEmail
+findUserByEmail: (email, callback) => {
+  // UNSAFE: Direct string concatenation (for educational purposes)
+  const query = `SELECT * FROM users WHERE email = '${email}'`;
+  console.log('DEBUG - Query:', query);
+  
+  db.query(query, (err, results) => {
       if (err) {
-        console.error('Error creating user:', err);
-        return callback(err);
+          console.error('DEBUG - Error:', err);
+          return callback(err);
       }
+      console.log('DEBUG - Results:', results);
       callback(null, results);
-    });
-  },
-
-  // Method to find user by email
-  findUserByEmail: (email, callback) => {
-    const query = 'SELECT * FROM users WHERE email = ?';
-    db.query(query, [email], (err, results) => {
-      if (err) {
-        console.error('Error finding user by email:', err);
-        return callback(err);
-      }
-
-      // Ensure results is an array (even if no rows are returned)
-      if (results === null) {
-        return callback(null, []);  // No results found
-      }
-
-      callback(null, results);  // Returning user details (array of results)
-    });
-  },
+  });
+},
 
   // Method to update the user's password and manage the password history
   updatePasswordHistory: (userId, newPassword, callback) => {

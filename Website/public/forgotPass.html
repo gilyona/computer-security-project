@@ -1,34 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Holon Telecom</title>
-</head>
+    <script>
+        async function handleResetPasswordFormSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
 
+            try {
+                const response = await fetch('/send-reset-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    sessionStorage.setItem('resetEmail', email);
+                    alert('Verification code sent. Please check your email.');
+                    window.location.href = '/emailverification.html';
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error sending the email');
+            }
+        }
+    </script>
+</head>
 <body>
     <div class="topnav">
         <table>
-            <th><a href="index.html"> <img id="logo" src="./Images/logo.png" alt="Holon Telecom Logo"
-                        href="index.html"></a></th>
+            <th><a href="index.html"> <img id="logo" src="./Images/logo.png" alt="Holon Telecom Logo"></a></th>
             <th><a href="login.html"><button class="navButton">Login</button></a></th>
-            <th><a href="register.html"><button class="navButton">Register </button></a></th>
+            <th><a href="register.html"><button class="navButton">Register</button></a></th>
         </table>
     </div>
 
     <div class="wrapper">
         <h2>Reset Password</h2>
-        <form action="#">
+        <form id="reset-password-form" onsubmit="handleResetPasswordFormSubmit(event)">
             <div class="input-box">
-                <input type="text" placeholder="Enter your email" required>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
             <div class="input-box button">
-                <input type="Submit" value="Reset Password">
+                <input type="submit" value="Reset Password">
             </div>
+        </form>
     </div>
-
 </body>
-
 </html>

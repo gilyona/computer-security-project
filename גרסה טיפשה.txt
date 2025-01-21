@@ -1,0 +1,21 @@
+גרסה "טיפשה"
+
+1. register.html
+ - אין type בשדות: email, password, confirm-password 
+2. login.html
+ - אין type בשדות: email, password 
+3. server.js
+ - const { validatePassword } = require('./passwordDumbUtils'); // Import password dumb validation logic
+4. passwordDumbUtils.js
+ - קובץ חדש.
+ - מכיל רק בדיקה האם הטקסט בשדה password שווה לטקסט בשדה confirm-password
+ - const passwordConfig = require('./passwordDumbConfig'); // Import password dumb rules
+5. passwordDumbConfig.js
+ - קובץ חדש.
+ - גודל סיסמא מינימלית = 1, מקסימלית = 20.
+ - כל שאר בדיקות הולידציה בסטטוס false.
+6. admin-dashboard.html
+ - אין type בשדות: email 
+7. users.js
+ - עודכנה הפונקציה להכנסת יוזר חדש בפונקציית sql "טיפשה":
+	// Dumb and vulnerable method to create a new user

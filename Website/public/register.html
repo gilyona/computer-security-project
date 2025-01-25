@@ -59,26 +59,19 @@
                 },
                 body: JSON.stringify(registrationData),
             })
+                // In register.html
                 .then(async (response) => {
-                    const errorMessageDiv = document.getElementById('error-message');
+                    const data = await response.json();
                     if (!response.ok) {
-                        const errorData = await response.json();
-                        errorMessageDiv.textContent = errorData.message; // Display error message
-                        errorMessageDiv.style.display = 'block'; // Make it visible
-                        throw new Error(errorData.message);
-                    } else {
-                        errorMessageDiv.style.display = 'none'; // Hide the error message on success
+                        alert(data.message + (data.details ? '\n' + data.details : ''));
+                        throw new Error(data.message);
                     }
-                    return response.json();
-                })
-                .then((data) => {
-                    // Registration successful
                     alert('Registration successful! Redirecting to the login page...');
                     window.location.href = 'login.html';
                 })
-                .catch((error) => {
-                    console.error('Error during registration:', error);
-                });
+            .catch((error) => {
+                console.error('Eror during registration:', error);
+            });
         });
     </script>
 </body>

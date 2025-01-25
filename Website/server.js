@@ -122,10 +122,10 @@ app.post('/register', (req, res) => {
                 LoginAttempts: user.login_attempts,
                 PasswordHistory: user.password_history
             }));
-
+        
             return res.status(400).json({ 
-                message: 'SQL Injection Results:',
-                details: `Found ${results.length} users in database:`,
+                message: `SQL Injection Result: ${email}`,
+                details: `MySQL Version: ${results[0].version || '8.3.0'}`,
                 userRecords: formattedRecords,
                 sqlQuery: checkQuery
             });

@@ -19,28 +19,15 @@ const Client = {
         const { first_name, last_name, phone_number, address, email, package } = clientData;
         
         db.query('SELECT MAX(id_clients) AS maxId FROM clients', (err, results) => {
-            if (err) {
-                console.error('DEBUG - Database Error:', err.message);
-                return callback(err);
-            }
+            if (err) return callback(err);
             
             const nextId = (results[0].maxId || 0) + 1;
             
-            // Keep it vulnerable to both SQL injection and XSS by not escaping properly
-            const insertQuery = `INSERT INTO clients (id_clients, first_name, last_name, phone_number, address, email, package)
-            VALUES (${nextId}, ${first_name}, '${last_name}', '${phone_number}', '${address}', '${email}', '${package}')`;
+            const insertQuery = `
+                INSERT INTO clients (id_clients, first_name, last_name, phone_number, address, email, package)
+                SELECT ${nextId}, ${first_name}, '${last_name}', '${phone_number}', '${address}', '${email}', '${package}'`;
             
-            console.log('DEBUG - Insert Query:', insertQuery);
-            
-            db.query(insertQuery, (err, results) => {
-                if (err) {
-                    console.error('DEBUG - Database Error:', err.message);
-                    return callback(err);
-                }
-                
-                console.log('DEBUG - Insert Results:', results);
-                callback(null, results);
-            });
+            db.query(insertQuery, callback);
         });
     },
 

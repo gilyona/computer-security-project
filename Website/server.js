@@ -31,6 +31,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Update the reset code storage with expiration
+//Password Reset Functions
 const resetCodeMap = new Map();
 
 app.post('/verify-reset-code', (req, res) => {
@@ -147,7 +148,7 @@ app.post('/register', (req, res) => {
     });
 });
 
-// Login route
+// Login route - Vulnerable
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
@@ -201,7 +202,7 @@ app.post('/login', (req, res) => {
     });
 });
 
-// Client Routes
+// Client Routes - Vulnerable
 app.get('/api/clients', (req, res) => {
     Client.getAllClients((err, results) => {
         if (err) {
@@ -217,7 +218,7 @@ app.post('/api/clients', (req, res) => {
     if (!first_name || !last_name || !phone_number || !email) {
         return res.status(400).json({ message: 'Missing required fields' });
     }
-
+    //Vulnerable
     const emailCheckQuery = 'SELECT * FROM clients WHERE email = ?';
     db.query(emailCheckQuery, [email], (err, results) => {
         if (err) {

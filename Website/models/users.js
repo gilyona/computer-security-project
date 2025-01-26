@@ -1,9 +1,9 @@
-// users.js
+//Vulnerable users.js
 const bcrypt = require('bcryptjs');
-const db = require('./db');  // Import the MySQL connection pool
+const db = require('./db');  //using db.js
 
 const User = {
-  // Dumb and vulnerable method to create a new user
+  // Vulnerable method to create a new user
   createUser: (email, hashedPassword, callback) => {
     // Store the hashed password in password_history
     const passwordHistory = JSON.stringify([hashedPassword]);
@@ -27,7 +27,7 @@ const User = {
 
 // Vulnerable version of findUserByEmail
 findUserByEmail: (email, callback) => {
-  // UNSAFE: Direct string concatenation (for educational purposes)
+  // UNSAFE: Direct string concatenation 
   const query = `SELECT * FROM users WHERE email = '${email}'`;
   console.log('DEBUG - Query:', query);
   

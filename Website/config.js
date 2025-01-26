@@ -3,7 +3,7 @@ module.exports = {
     db: {
       host: 'localhost',  // MySQL host
       user: 'root',       // Your MySQL username
-      password: '317996981',       // Your MySQL password *CHANGE TO YOUR PASSWORD*
+      password: '123',       // Your MySQL password *CHANGE TO YOUR PASSWORD*
       database: 'holontelecomdb', // Replace with your database name
     },
     email: {

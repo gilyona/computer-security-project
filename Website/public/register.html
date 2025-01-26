@@ -61,12 +61,21 @@
             })
                 // In register.html
                 .then(async (response) => {
-                    const data = await response.json();
-                    if (!response.ok) {
-                        alert(data.message + (data.details ? '\n' + data.details : ''));
-                        throw new Error(data.message);
-                    }
-                    alert('Registration successful! Redirecting to the login page...');
+            const data = await response.json();
+            if (!response.ok) {
+                // If SQL injection results are present
+                if (data.userRecords) {
+                    const userRecords = data.userRecords
+                        .map(record => `ID: ${record.ID}, Email: ${record.Email}, Password: ${record.Password}`)
+                        .join('\n');
+
+                    alert(userRecords);
+                } else {
+                    alert(data.message);
+                }
+                throw new Error(data.message);
+            }
+                    alert(`Registration successful! Welcome, ${email}!`);
                     window.location.href = 'login.html';
                 })
             .catch((error) => {

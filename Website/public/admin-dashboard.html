@@ -171,17 +171,17 @@
             filteredClients.forEach((client) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${client.id_clients}</td>
-                    <td>${client.first_name}</td>
-                    <td>${client.last_name}</td>
-                    <td>${client.phone_number}</td>
-                    <td>${client.address || 'N/A'}</td>
-                    <td>${client.email}</td>
-                    <td>${client.package || 'N/A'}</td>
+                    <td>${escapeHtml(client.id_clients)}</td>
+                    <td>${escapeHtml(client.first_name)}</td>
+                    <td>${escapeHtml(client.last_name)}</td>
+                    <td>${escapeHtml(client.phone_number)}</td>
+                    <td>${escapeHtml(client.address) || 'N/A'}</td>
+                    <td>${escapeHtml(client.email)}</td>
+                    <td>${escapeHtml(client.package) || 'N/A'}</td>
                     <td>
-                        <button class="admin-actions remove" data-id="${client.id_clients}">Remove</button>
+                        <button class="admin-actions remove" data-id="${escapeHtml(client.id_clients)}">Remove</button>
                     </td>
-                `;
+                    `;
                 tableBody.appendChild(row);
             });
     
